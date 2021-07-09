@@ -13,6 +13,9 @@ import android.view.View;
 import android.widget.TextView;
 
 import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class AsyncTaskActivity extends AppCompatActivity {
     private TextView counterLbl;
@@ -31,8 +34,10 @@ public class AsyncTaskActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                Thread th = new CounterThread();
-                th.start();
+
+                ScheduledExecutorService backgroundExecutor = Executors.newSingleThreadScheduledExecutor();
+                //Schedule Thread. It allows UI thread to update
+                backgroundExecutor.schedule(new CounterThread(),1, TimeUnit.SECONDS);
 
                 fab.setEnabled(false);
             }
@@ -43,12 +48,12 @@ public class AsyncTaskActivity extends AppCompatActivity {
         }
     }
 
-    class CounterThread extends Thread{
+    class CounterThread implements Runnable{
         int i ;
         @Override
         public void run() {
             for( int i = 0; i < 100; i++) {
-                System.out.println(" C "+i);
+                System.out.println(" Counting "+i);
                 runOnUiThread(
                         new Runnable() {
                             @Override
