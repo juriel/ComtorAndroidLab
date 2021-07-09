@@ -18,6 +18,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button btn4;
     private TextView label;
 
+    String KEY_LBL = "LABEL";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,58 +31,52 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn3 = findViewById(R.id.btn_3);
         btn4 = findViewById(R.id.btn_4);
         label = findViewById(R.id.lbl_Hello);
-        //Metodo 1
+        //Method 1  - Innerclass
         btn1.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        label.setText("Boton 1");
+                        label.setText("Button 1 Pressed");
                         Intent intent = new Intent(MainActivity.this,AsyncTaskActivity.class);
                         startActivity(intent);
                     }
                 }
         );
-        //Metodo 2
-
+        //Method 2 - InnerClass lamda
         btn2.setOnClickListener((View  v) -> {
-            label.setText("Boton 2");
+            label.setText("Button 2 Pressed");
             btn3.setBackgroundColor(Color.RED);
         });
 
-//       Metodo 3
+        // Method 3  - Activity is a listener
         btn3.setOnClickListener(this);
 
-// Metodo 4
+        // Method 4 - Inner Class declared
         btn4.setOnClickListener(new PressButton4());
 
         if (savedInstanceState != null){ // Se está resconstruyendo la actividad
-            label.setText(savedInstanceState.getString("AVISO"));
+            label.setText(savedInstanceState.getString(KEY_LBL));
         }
 
-    }
-
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString("AVISO",label.getText().toString());
     }
 
     @Override
     public void onClick(View view) {
-        label.setText("Boton 3");
-
-        for (int i =0 ; i < 1000000; i++){
-            System.out.println("XXXX");
-        }
+        label.setText("Button 3 Pressed" );
         btn4.setBackgroundColor(Color.YELLOW);
-
     }
 
     class PressButton4 implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            label.setText("Boton 4");
+            label.setText("Button 4 Pressed");
         }
     }
 
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(KEY_LBL,label.getText().toString());
+    }
 }

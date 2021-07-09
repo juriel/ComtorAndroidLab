@@ -9,23 +9,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.view.View;
 import android.widget.TextView;
 
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.RunnableFuture;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 public class AsyncTaskActivity extends AppCompatActivity {
-    private TextView contador;
+    private TextView counterLbl;
     FloatingActionButton fab;
     int ii;
     @Override
@@ -41,83 +31,46 @@ public class AsyncTaskActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                Thread th = new ContarHilo();
+                Thread th = new CounterThread();
                 th.start();
 
-                //ExecutorService executor = Executors.newFixedThreadPool(2);
-                //executor.execute(new FutureTask<String>(new Contar()));
                 fab.setEnabled(false);
             }
         });
-        contador = findViewById(R.id.contador);
+        counterLbl = findViewById(R.id.contador);
         if(savedInstanceState != null){
-            contador.setText(savedInstanceState.getString("AVISO"));
+            counterLbl.setText(savedInstanceState.getString("AVISO"));
         }
     }
 
-
-
-    class Contar implements Callable<String> {
+    class CounterThread extends Thread{
         int i ;
         @Override
-        public String call() throws Exception {
-            for( i = 0; i < 10; i++){
-                runOnUiThread(() -> {contador.setText("Contando "+i);});
-
-                Thread.sleep(500);
-                /*
-                Message msg = new Message();
-                msg.getData().putString("message","AVISO "+i);
-                updateTextHandler.sendMessage(msg);
-                Thread.sleep(500);
-
-                 */
+        public void run() {
+            for( int i = 0; i < 100; i++) {
+                System.out.println(" C "+i);
+                runOnUiThread(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                counterLbl.setText("Contando " + ii);
+                            }
+                        }
+                );
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-
-
-            runOnUiThread(()-> {fab.setEnabled(true);});
-
-
-            fab.setEnabled(false);
-
-            return "Termino";
+            runOnUiThread(() -> {counterLbl.setText("Finished");});
         }
     }
+
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString("AVISO",contador.getText().toString());
-    }
-
-
-    class ContarHilo extends Thread{
-        int i ;
-        @Override
-        public void run() {
-            haga();
-        }
-    }
-
-    public void haga(){
-        for( int i = 0; i < 1000000; i++) {
-            System.out.println(" C "+i);
-            ii = i;
-            runOnUiThread(
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            contador.setText("Contando " + ii);
-                        }
-                    }
-            );
-
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
+        outState.putString("AVISO", counterLbl.getText().toString());
     }
 }
