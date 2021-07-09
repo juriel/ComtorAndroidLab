@@ -3,6 +3,7 @@ package net.comtor.android.lab;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.PersistableBundle;
@@ -35,6 +36,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void onClick(View view) {
                         label.setText("Boton 1");
+                        Intent intent = new Intent(MainActivity.this,AsyncTaskActivity.class);
+                        startActivity(intent);
                     }
                 }
         );
