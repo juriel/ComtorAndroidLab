@@ -29,8 +29,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn3 = findViewById(R.id.btn_3);
         btn4 = findViewById(R.id.btn_4);
         label = findViewById(R.id.lbl_Hello);
-
-
+        //Metodo 1
         btn1.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -41,14 +40,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 }
         );
+        //Metodo 2
 
         btn2.setOnClickListener((View  v) -> {
             label.setText("Boton 2");
             btn3.setBackgroundColor(Color.RED);
         });
 
-
+//       Metodo 3
         btn3.setOnClickListener(this);
+
+// Metodo 4
         btn4.setOnClickListener(new PressButton4());
 
         if (savedInstanceState != null){ // Se está resconstruyendo la actividad
