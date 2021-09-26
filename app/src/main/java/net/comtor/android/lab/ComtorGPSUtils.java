@@ -22,19 +22,19 @@ public class ComtorGPSUtils {
      */
     private static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = UPDATE_INTERVAL_IN_MILLISECONDS / 2;
 
-    public static FusedLocationProviderClient createFusedLocationProviderClient(Context ctx,LocationCallback locationCallback){
+    public static FusedLocationProviderClient createFusedLocationProviderClient(Context ctx, LocationCallback locationCallback,Looper looper) throws Exception {
 
-            FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(ctx);
+        FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(ctx);
 
-            LocationRequest locationRequest = LocationRequest.create();
-            locationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
-            locationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
-            locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-            fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
+        LocationRequest locationRequest = LocationRequest.create();
+        locationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
+        locationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        if (looper == null){
+            looper = Looper.getMainLooper();
+        }
+        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, looper);
         return fusedLocationClient;
     }
 
-    public void generateLog(String log){
-
-    }
 }

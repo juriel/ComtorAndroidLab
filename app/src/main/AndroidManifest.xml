@@ -3,6 +3,9 @@
     package="net.comtor.android.lab">
 
     <!-- To request foreground location access, declare one of these permissions. -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -29,9 +32,13 @@
             android:exported="true"
             android:foregroundServiceType="location"
 
+            />
 
-
-            ></service>
+        <service android:name=".ComtorGpsJobService"
+            android:enabled="true"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:exported="true"
+            />
     </application>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.INTERNET" />

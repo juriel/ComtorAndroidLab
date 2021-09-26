@@ -37,6 +37,7 @@ public class SendLogMessageThread extends Thread{
         }
     }
     public static void log(String message){
+        Log.d("ComtorLab",message);
         Thread th = new SendLogMessageThread(message);
         th.start();
     }

@@ -2,10 +2,15 @@ package net.comtor.android.lab;
 
 import android.Manifest;
 import android.app.Service;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.app.job.JobService;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Binder;
 import android.os.IBinder;
+import android.os.PersistableBundle;
 import android.util.Log;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -38,7 +43,21 @@ public class GPSService extends Service {
     @Override
     public void onDestroy() {
         SendLogMessageThread.log("onDestroy");
+        JobInfo.Builder jb = new JobInfo.Builder(ComtorGpsJobService.JOB_ID,new ComponentName(this,ComtorGpsJobService.class));
+        jb.setPersisted(true);
+        jb.setPeriodic(30000);
 
+        jb.setRequiresDeviceIdle(false);
+        jb.setRequiresCharging(false);
+        JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+        int r = scheduler.schedule(jb.build());
+        if (r<=0){
+            SendLogMessageThread.log("Fallo scheduler");
+        }
+        else {
+            SendLogMessageThread.log("Scheduler OK "+r);
+
+        }
         super.onDestroy();
     }
 
@@ -65,11 +84,17 @@ public class GPSService extends Service {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        if (locationCallback == null) {
-            locationCallback = new ComtorGPSLocationCallback();
-        }
-        if (fusedLocationClient == null) {
-            fusedLocationClient = ComtorGPSUtils.createFusedLocationProviderClient(this, locationCallback);
+        try {
+            if (locationCallback == null) {
+                locationCallback = new ComtorGPSLocationCallback();
+            }
+            if (fusedLocationClient == null) {
+                fusedLocationClient = ComtorGPSUtils.createFusedLocationProviderClient(this, locationCallback,null);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            SendLogMessageThread.log("GPSSERVICE "+e.getMessage());
+
         }
 
     }

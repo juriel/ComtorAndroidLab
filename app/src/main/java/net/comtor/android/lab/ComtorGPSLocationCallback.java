@@ -26,9 +26,7 @@ public class ComtorGPSLocationCallback extends LocationCallback {
 
     @Override
     protected void finalize() throws Throwable {
-        SendLogMessageThread.log("ComtorGPSLocationCallback finalize" +
-                "" +
-                "");
+        SendLogMessageThread.log("ComtorGPSLocationCallback finalize");
         super.finalize();
     }
 
