@@ -11,11 +11,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+/**
+ * el objetivo de esta actividad es mostrar los diferentes modos de operacion de los
+ * Listeners
+ */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private Button btn1;
     private Button btn2;
     private Button btn3;
     private Button btn4;
+    private Button btnGps;
     private TextView label;
 
     String KEY_LBL = "LABEL";
@@ -31,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn3 = findViewById(R.id.btn_3);
         btn4 = findViewById(R.id.btn_4);
         label = findViewById(R.id.lbl_Hello);
+        btnGps = findViewById(R.id.btn_5);
         //Method 1  - Innerclass
         btn1.setOnClickListener(
                 new View.OnClickListener() {
@@ -57,6 +63,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (savedInstanceState != null){ // Se está resconstruyendo la actividad
             label.setText(savedInstanceState.getString(KEY_LBL));
         }
+
+
+        //-----
+
+        btnGps.setOnClickListener(btn -> {
+            Intent intent = new Intent(this, GPSActivity.class);
+            startActivity(intent);
+        });
 
     }
 
