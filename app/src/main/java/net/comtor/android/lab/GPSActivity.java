@@ -4,6 +4,8 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -64,18 +66,35 @@ public class GPSActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onPause() {
+        SendLogMessageThread.log("GPS Activity onPause ");
+        super.onPause();
+    }
+
+    @Override
     protected void onStop() {
+        /*
         if (serviceIntent != null) {
             stopService(serviceIntent);
             serviceIntent = null;
         }
-        super.onStop();
         unbindService(connection);
+        */
+        SendLogMessageThread.log("GPS Activity onDestroy ");
+
+        super.onStop();
     }
 
     private void startGpsService(){
+
         serviceIntent = new Intent(this, GPSService.class);
-        bindService(serviceIntent, connection, Context.BIND_AUTO_CREATE);
+        //bindService(serviceIntent, connection, Context.BIND_AUTO_CREATE);
+
+        startService(serviceIntent);
+
+
+
+
     }
 
     private void onClickStartService(View v) {
